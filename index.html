@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Promedio Ponderado</title>
+    
+    <!-- Carga de Bootstrap 5 CSS mediante CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Carga de Vue.js 3 mediante CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+
+    <body class="bg-light">
+
+        <div id="app" class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-primary text-white text-center py-3">
+                            <h3 class="mb-0 fs-4">CALCULADORA DE CALIFICACIONES</h3>
+                        </div>
+            
+                        <div class="card-body p-4">
+                            <form @submit.prevent="calcularPromedio">
+                            
+                                <!-- Bloque 1 (20%) -->
+                                <div class="mb-3 row align-items-center">
+                                    <label for="bloque1" class="col-sm-4 col-form-label fw-semibold">BLOQUE 1     <span class="badge bg-secondary">20.00%</span></label>
+                                    <div class="col-sm-8">
+                                        <input 
+                                            type="number" 
+                                            id="bloque1" 
+                                            v-model.number="notas.bloque1" 
+                                            class="form-control" 
+                                            placeholder="ingrese nota (entre 0.00-10.00)" 
+                                            min="0" 
+                                            max="10" 
+                                            step="0.01" 
+                                            required>
+                                    </div>
+                                </div>
+
+                                <!-- Bloque 2 (20%) -->
+                                <div class="mb-3 row align-items-center">
+                                    <label for="bloque2" class="col-sm-4 col-form-label fw-semibold">BLOQUE 2     <span class="badge bg-secondary">20.00%</span></label>
+                                    <div class="col-sm-8">
+                                        <input 
+                                            type="number" 
+                                            id="bloque2" 
+                                            v-model.number="notas.bloque2" 
+                                            class="form-control" 
+                                            placeholder="ingrese nota (entre 0.00-10.00)" 
+                                            min="0" 
+                                            max="10" 
+                                            step="0.01" 
+                                            required>
+                                    </div>
+                                </div>
+                    
+                                <!-- Bloque 3 (20%) -->
+                                <div class="mb-3 row align-items-center">
+                                    <label for="bloque3" class="col-sm-4 col-form-label fw-semibold">BLOQUE 3     <span class="badge bg-secondary">20.00%</span></label>
+                                    <div class="col-sm-8">
+                                        <input 
+                                            type="number" 
+                                            id="bloque3"
+                                            v-model.number="notas.bloque3" 
+                                            class="form-control" 
+                                            placeholder="ingrese nota (entre 0.00-10.00)" 
+                                            min="0" 
+                                            max="10" 
+                                            step="0.01" 
+                                            required>
+                                    </div>
+                                </div>
+
+                                <!-- Proyecto Final (40%) -->
+                                <div class="mb-3 row align-items-center">
+                                    <label for="proyecto" class="col-sm-4 col-form-label fw-semibold">PROYECTO FINAL     <span class="badge bg-secondary">20.00%</span></label>
+                                    <div class="col-sm-8">
+                                        <input 
+                                            type="number" 
+                                            id="proyecto" 
+                                            v-model.number="notas.proyecto" 
+                                            class="form-control" 
+                                            placeholder="ingrese nota (entre 0.00-10.00)" 
+                                            min="0" 
+                                            max="10" 
+                                            step="0.01" 
+                                            required>
+                                    </div>
+                                </div>
+
+                                <!-- Botón para calcular -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-success btn-lg"> ¡CALCULAR PROMEDIO! </button>
+                                </div>
+
+                            </form>
+
+                            <!-- Sección de Resultados (Se muestra tras presionar el botón) -->
+                            <div v-if="promedioCalculado !== null" class="mt-4 pt-3 border-top text-center">
+                                <h4 class="fs-5 text-muted mb-2">PROMEDIO FINAL:</h4>
+                                <div class="display-4 fw-bold text-primary mb-2">
+                                    {{ promedioCalculado.toFixed(2) }}
+                                </div>
+                            
+                                <!-- Estado según la nota final -->
+                                <span 
+                                    class="badge fs-6 px-3 py-2" 
+                                    :class="promedioCalculado >= 6.0 ? 'bg-success' : 'bg-danger'">
+                                    {{ promedioCalculado >= 6.0 ? 'APROBADO' : 'REPROBADO' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript de Vue.js para la lógica interactiva -->
+        <script>
+            const { createApp } = Vue;
+
+            createApp({
+            data() {
+                return {
+                notas: {
+                    bloque1: null,
+                    bloque2: null,
+                    bloque3: null,
+                    proyecto: null
+                },
+                promedioCalculado: null
+                }
+            },
+            
+            methods: {
+                calcularPromedio() {
+                // Ponderaciones: 20% + 20% + 20% + 40% = 100% (1.0)
+                const b1 = this.notas.bloque1 * 0.20;
+                const b2 = this.notas.bloque2 * 0.20;
+                const b3 = this.notas.bloque3 * 0.20;
+                const pf = this.notas.proyecto * 0.40;
+
+                // Cálculo del promedio ponderado
+                this.promedioCalculado = b1 + b2 + b3 + pf;
+                }
+            }
+            }).mount('#app');
+        </script>
+
+        <!-- JS de Bootstrap (opcional para componentes interactivos) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
